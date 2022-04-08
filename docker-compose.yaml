@@ -1,0 +1,63 @@
+---
+version: "3.9"
+services:
+
+  vault-1:
+    container_name: vault-1
+    image: "vault:${VAULT_VERSION}"
+    ports:
+      - 18200:8200
+    volumes:
+      - ./vault/1:/vault
+    environment:
+      VAULT_ADDR: "${VAULT_ADDR}"
+    command: server
+    cap_add:
+      - IPC_LOCK
+    networks:
+      vault-network:
+        ipv4_address: 172.21.0.11
+        aliases:
+          - vault-1
+
+  vault-2:
+    container_name: vault-2
+    image: "vault:${VAULT_VERSION}"
+    ports:
+      - 28200:8200
+    volumes:
+      - ./vault/2:/vault
+    environment:
+      VAULT_ADDR: "${VAULT_ADDR}"
+    command: server
+    cap_add:
+      - IPC_LOCK
+    networks:
+      vault-network:
+        ipv4_address: 172.21.0.12
+        aliases:
+          - vault-2
+
+  vault-3:
+    container_name: vault-3
+    image: "vault:${VAULT_VERSION}"
+    ports:
+      - 38200:8200
+    volumes:
+      - ./vault/3:/vault
+    environment:
+      VAULT_ADDR: "${VAULT_ADDR}"
+    command: server
+    cap_add:
+      - IPC_LOCK
+    networks:
+      vault-network:
+        ipv4_address: 172.21.0.13
+        aliases:
+          - vault-3
+
+networks:
+  vault-network:
+    ipam:
+      config:
+        - subnet: 172.21.0.0/24
